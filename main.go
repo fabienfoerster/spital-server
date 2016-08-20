@@ -41,6 +41,7 @@ var port string
 
 func init() {
 	dbHost = os.Getenv("MYSQL_HOST")
+	fmt.Println(dbHost)
 	dbUser = os.Getenv("MYSQL_USER")
 	if dbUser == "" {
 		dbUser = "root"
