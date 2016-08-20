@@ -37,6 +37,7 @@ type BoxComposition struct {
 var dbHost string
 var dbUser string
 var dbPassword string
+var port string
 
 func init() {
 	dbHost = os.Getenv("MYSQL_HOST")
@@ -45,6 +46,10 @@ func init() {
 		dbUser = "root"
 	}
 	dbPassword = os.Getenv("MYSQL_PASSWORD")
+	port = os.Getenv("PORT")
+	if port == "" {
+		port = ":5000"
+	}
 }
 
 func main() {
@@ -63,7 +68,7 @@ func main() {
 	v1.GET("/boxes", env.GetBoxes)
 	v1.POST("/boxes", env.CreateBox)
 	// Run the router
-	r.Run(":5000")
+	r.Run(port)
 }
 
 func initDb() *gorp.DbMap {
