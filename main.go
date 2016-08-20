@@ -7,7 +7,7 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/go-sql-driver/mysql"
+	driver "github.com/go-sql-driver/mysql"
 	"gopkg.in/gorp.v1"
 )
 
@@ -41,7 +41,9 @@ var port string
 
 func init() {
 	dbHost = os.Getenv("MYSQL_HOST")
-	fmt.Println(dbHost)
+	if dbHost == "" {
+		dbHost = "localhost"
+	}
 	dbUser = os.Getenv("MYSQL_USER")
 	if dbUser == "" {
 		dbUser = "root"
@@ -73,8 +75,9 @@ func main() {
 }
 
 func initDb() *gorp.DbMap {
-	datasource := fmt.Sprintf("%s:%s@%s/hospital", dbUser, dbPassword, dbHost)
-	db, err := sql.Open("mysql", datasource)
+	config := &driver.Config{User: dbUser, Passwd: dbPassword, Net: "tcp", Addr: dbHost, DBName: "hospital"}
+	fmt.Println(config.FormatDSN())
+	db, err := sql.Open("mysql", config.FormatDSN())
 	checkErr(err, "sql.Open failed")
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
 	dbmap.AddTableWithName(Box{}, "box").SetKeys(true, "ID")
