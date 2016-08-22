@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os"
 
@@ -42,7 +41,7 @@ var port string
 func init() {
 	dbHost = os.Getenv("MYSQL_HOST")
 	if dbHost == "" {
-		dbHost = "localhost"
+		dbHost = "localhost:3306"
 	}
 	dbUser = os.Getenv("MYSQL_USER")
 	if dbUser == "" {
@@ -66,6 +65,8 @@ func main() {
 	// Routing
 	// Initialize routing
 	r := gin.Default()
+	//Enable Cors
+	r.Use(Cors())
 	// Initialize routes
 	v1 := r.Group("api/v1")
 	v1.GET("/boxes", env.GetBoxes)
@@ -76,7 +77,6 @@ func main() {
 
 func initDb() *gorp.DbMap {
 	config := &driver.Config{User: dbUser, Passwd: dbPassword, Net: "tcp", Addr: dbHost, DBName: "hospital"}
-	fmt.Println(config.FormatDSN())
 	db, err := sql.Open("mysql", config.FormatDSN())
 	checkErr(err, "sql.Open failed")
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
@@ -89,5 +89,13 @@ func initDb() *gorp.DbMap {
 func checkErr(err error, msg string) {
 	if err != nil {
 		log.Fatalln(msg, err)
+	}
+}
+
+func Cors() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Add("Access-Control-Allow-Origin", "http://localhost:3000")
+		c.Writer.Header().Add("Access-Control-Allow-Credentials", "true")
+		c.Next()
 	}
 }
