@@ -55,7 +55,7 @@ func init() {
 	}
 	clientURL = os.Getenv("CLIENT_URL")
 	if clientURL == "" {
-		clientURL = "http://localhost:3000"
+		clientURL = "http://localhost:3"
 	}
 }
 
@@ -99,8 +99,7 @@ func checkErr(err error, msg string) {
 
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Writer.Header().Add("Access-Control-Allow-Origin", clientURL)
-		c.Writer.Header().Add("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")
 		c.Next()
 	}
 }
