@@ -1,6 +1,6 @@
 # spital-server
 
-To run the server you need a *docker-compose.yml* file :
+To run the whole app (server + db + client) you need a *docker-compose.yml* file :
 
 ```yaml
 version: '2'
@@ -29,3 +29,10 @@ services:
       MYSQL_USER: xxx
       MYSQL_PASSWORD: xxx
 ```
+
+## Dev
+When developing add spital-server as an alias for localhost in /etc/hosts.
+
+It's not great at all but the client expect the server to be at http://spital-server:5000 .
+
+Need to modified that but it need to be handle in the build process of the client. (cf http://github.com/fabienfoerster/spital-client)
