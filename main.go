@@ -37,6 +37,7 @@ var dbHost string
 var dbUser string
 var dbPassword string
 var port string
+var clientURL string
 
 func init() {
 	dbHost = os.Getenv("MYSQL_HOST")
@@ -51,6 +52,10 @@ func init() {
 	port = os.Getenv("PORT")
 	if port == "" {
 		port = ":5000"
+	}
+	clientURL = os.Getenv("CLIENT_URL")
+	if clientURL == "" {
+		clientURL = "http://localhost:3000"
 	}
 }
 
@@ -94,7 +99,7 @@ func checkErr(err error, msg string) {
 
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Writer.Header().Add("Access-Control-Allow-Origin", "http://localhost:3000")
+		c.Writer.Header().Add("Access-Control-Allow-Origin", clientURL)
 		c.Writer.Header().Add("Access-Control-Allow-Credentials", "true")
 		c.Next()
 	}
