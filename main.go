@@ -62,6 +62,7 @@ func main() {
 	// Instrument API Endpoints
 	v1.GET("/instruments", env.GetInstruments)
 	v1.POST("/instruments", env.CreateInstrument)
+	v1.GET("/instruments/:id/boxes", env.GetInstrumentBoxes)
 	// Specialty API Endpoints
 	v1.GET("/specialties", env.GetSpecialties)
 	v1.GET("/specialties/:specialty/boxes", env.GetBoxesBySpecialty)
