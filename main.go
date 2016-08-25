@@ -97,6 +97,7 @@ func checkErr(err error, msg string) {
 	}
 }
 
+//Cors handle the CORS nonsense
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Add("Access-Control-Allow-Origin", "*")

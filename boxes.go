@@ -13,7 +13,7 @@ type Box struct {
 	Name         string `db:"name" json:"name"`
 	LastModified int64  `db:"last_modified" json:"last_modified"`
 	Information  string `db:"information" json:"information"`
-	Specialty    int    `db:"specialty" json:"specialty"`
+	Specialty    string `db:"specialty" json:"specialty"`
 }
 
 // GetBoxes return all the boxes we have
@@ -34,7 +34,7 @@ func (env *Env) CreateBox(c *gin.Context) {
 	var box Box
 	box.LastModified = time.Now().UnixNano()
 	c.Bind(&box)
-	if box.Name == "" || box.Specialty == 0 {
+	if box.Name == "" || box.Specialty == "" {
 		c.JSON(422, gin.H{"error": "fields are empty"})
 	} else {
 		err := env.dbmap.Insert(&box)
