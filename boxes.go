@@ -9,11 +9,12 @@ import (
 
 // Box represent a chirurgical box
 type Box struct {
-	ID           int64  `db:"id" json:"id"`
-	Name         string `db:"name" json:"name"`
-	LastModified int64  `db:"last_modified" json:"last_modified"`
-	Information  string `db:"information" json:"information"`
-	Specialty    string `db:"specialty" json:"specialty"`
+	ID                 int64  `db:"id" json:"id"`
+	RegistrationNumber string `db:"registration_number" json:"registration_number"`
+	Name               string `db:"name" json:"name"`
+	LastModified       int64  `db:"last_modified" json:"last_modified"`
+	Information        string `db:"information" json:"information"`
+	Specialty          string `db:"specialty" json:"specialty"`
 }
 
 // GetBoxes return all the boxes we have
@@ -34,7 +35,7 @@ func (env *Env) CreateBox(c *gin.Context) {
 	var box Box
 	box.LastModified = time.Now().UnixNano()
 	c.Bind(&box)
-	if box.Name == "" || box.Specialty == "" {
+	if box.Name == "" || box.Specialty == "" || box.RegistrationNumber == "" {
 		c.JSON(422, gin.H{"error": "fields are empty"})
 	} else {
 		err := env.dbmap.Insert(&box)
@@ -45,5 +46,6 @@ func (env *Env) CreateBox(c *gin.Context) {
 			c.JSON(201, "Insert successful")
 		}
 	}
-
 }
+
+// curl -i -X POST -H "Content-Type: application/json" -d "{ \"name\" : \"Fabien\", \"specialty\": 3}" http://localhost:5000/api/v1/boxes
