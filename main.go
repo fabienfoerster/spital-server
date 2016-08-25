@@ -64,7 +64,7 @@ func main() {
 	v1.POST("/instruments", env.CreateInstrument)
 	// Specialty API Endpoints
 	v1.GET("/specialties", env.GetSpecialties)
-
+	v1.GET("/specialties/:specialty/boxes", env.GetBoxesBySpecialty)
 	//BoxComposition API Endpoints
 	v1.GET("/boxes/:id/content", env.GetBoxComposition)
 	v1.POST("/boxes/:id/content", env.AddInstrumentToBox)

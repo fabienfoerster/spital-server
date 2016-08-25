@@ -27,7 +27,6 @@ func (env *Env) GetBoxes(c *gin.Context) {
 	} else {
 		c.JSON(200, boxes)
 	}
-
 }
 
 //CreateBox add a box in the listing of boxes
@@ -48,4 +47,4 @@ func (env *Env) CreateBox(c *gin.Context) {
 	}
 }
 
-// curl -i -X POST -H "Content-Type: application/json" -d "{ \"name\" : \"Fabien\", \"specialty\": 3}" http://localhost:5000/api/v1/boxes
+// curl -i -X POST -H "Content-Type: application/json" -d '{ "name" : "Fabien", "specialty": "CEC", "registration_number":"MAF1231HJO"}' http://localhost:5000/api/v1/boxes

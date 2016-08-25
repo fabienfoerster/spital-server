@@ -16,3 +16,16 @@ func (env *Env) GetSpecialties(c *gin.Context) {
 	c.JSON(200, specialties)
 
 }
+
+//GetBoxesBySpecialty return all the boxes for the given specialty
+func (env *Env) GetBoxesBySpecialty(c *gin.Context) {
+	specialty := c.Params.ByName("specialty")
+	type Boxes []Box
+	var boxes Boxes
+	_, err := env.dbmap.Select(&boxes, "SELECT * FROM box WHERE specialty=?", specialty)
+	if err != nil {
+		c.JSON(404, gin.H{"error": "no box(es) into the table"})
+	} else {
+		c.JSON(200, boxes)
+	}
+}
