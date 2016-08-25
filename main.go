@@ -56,11 +56,15 @@ func main() {
 	r.Use(Cors())
 	// Initialize routes
 	v1 := r.Group("api/v1")
+	// Box API Endpoints
 	v1.GET("/boxes", env.GetBoxes)
 	v1.POST("/boxes", env.CreateBox)
-
+	// Instrument API Endpoints
 	v1.GET("/instruments", env.GetInstruments)
 	v1.POST("/instruments", env.CreateInstrument)
+	// Specialty API Endpoints
+	v1.GET("/specialties", env.GetSpecialties)
+
 	// Run the router
 	r.Run(port)
 }
