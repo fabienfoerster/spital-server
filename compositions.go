@@ -15,6 +15,7 @@ type BoxComposition struct {
 	Missing      int   `db:"missing" json:"missing"`
 }
 
+//BoxContent return the actual content of the box
 type BoxContent struct {
 	Name     string `json:"name"`
 	Quantity int    ` json:"quantity"`
@@ -23,10 +24,10 @@ type BoxContent struct {
 
 //GetBoxComposition return the instruments inside a box
 func (env *Env) GetBoxComposition(c *gin.Context) {
-	//id := c.Params.ByName("id")
+	id := c.Params.ByName("id")
 	type WholeContent []BoxContent
 	var wholeContent WholeContent
-	_, err := env.dbmap.Select(&wholeContent, "SELECT instrument.name, box_composition.quantity, box_composition.missing FROM box_composition INNER JOIN instrument ON box_composition.instrumentid=instrument.id")
+	_, err := env.dbmap.Select(&wholeContent, "SELECT instrument.name, box_composition.quantity, box_composition.missing FROM box_composition  INNER JOIN instrument ON box_composition.instrumentid=instrument.id AND box_composition.boxid=?", id)
 	if err != nil {
 		log.Println(err)
 		c.JSON(404, gin.H{"error": "no instrument(s) found for the box"})
