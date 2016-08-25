@@ -14,7 +14,7 @@ services:
       MYSQL_ROOT_PASSWORD: xxx
       MYSQL_DATABASE: xxx
       MYSQL_USER: xxx
-      MYSQL_PASSWORD: xx
+      MYSQL_PASSWORD: xxx
   spital-server:
     depends_on:
       - db
@@ -28,6 +28,14 @@ services:
       MYSQL_HOST: db:3306
       MYSQL_USER: xxx
       MYSQL_PASSWORD: xxx
+  spital-client:
+    image: fabienfoerster/spital-client:latest
+    ports:
+      - "3000:80"
+    restart: always
+    environment:
+      SERVER_URL: spital-server:5000
+
 ```
 
 ## Dev
