@@ -73,6 +73,7 @@ func main() {
 	v1.GET("/statusreports/reasons", env.GetReasonsStatusReport)
 	v1.GET("/statusreports", env.GetStatusReports)
 	v1.POST("/statusreports", env.CreateStatusReport)
+	v1.PUT("/statusreports/:id", env.UpdateStatusReport)
 
 	//IncidentReport API Endpoints
 	v1.GET("/incidentreports/reasons", env.GetReasonsIncident)

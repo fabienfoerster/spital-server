@@ -63,6 +63,29 @@ func (env *Env) CreateStatusReport(c *gin.Context) {
 
 // curl -i -X POST -H "Content-Type: application/json" -d '{"boxid":1,"instrumentid":2,"specialty":"CEC","interlocutor":"Pauline","dategoing":145223364,"reason":"Rajout"}' http://localhost:5000/api/v1/statusreports
 
+//UpdateStatusReport update a status report
+func (env *Env) UpdateStatusReport(c *gin.Context) {
+	id := c.Params.ByName("id")
+	var statusReport StatusReport
+	err := env.dbmap.SelectOne(&statusReport, "SELECT * FROM status_report WHERE id=?", id)
+	if err != nil {
+		log.Println(err)
+		c.JSON(404, gin.H{"error": "status report not found"})
+	}
+	var json StatusReport
+	c.Bind(&json)
+	if json.BoxID == 0 || json.InstrumentID == 0 || json.Specialty == "" || json.Interlocutor == "" || json.DateGoing == 0 || json.Reason == "" {
+		c.JSON(422, gin.H{"error": "fields are empty"})
+	}
+	json.ID = statusReport.ID
+	_, err = env.dbmap.Update(&json)
+	if err != nil {
+		log.Println(err)
+		c.JSON(500, "Update failed")
+	}
+	c.JSON(200, json)
+}
+
 func (env *Env) handleReason(boxID int64, instruID int64, reason string) bool {
 	if reason == "Rajout" {
 		return env.modifyInstrumentCount(boxID, instruID, 1)
