@@ -20,11 +20,11 @@ type StatusReport struct {
 	Reason        string `db:"reason" json:"reason"`
 }
 
-var reasons = [...]string{"Instru manquant", "Rajout", "Réparation", "Instru en plus", "Prob stérilité/propreté", "Modification boite", "Création boite", "Boite ouverte non utilisée pour réappro"}
+var reasonsStatusReport = [...]string{"Instru manquant", "Rajout", "Réparation", "Instru en plus", "Prob stérilité/propreté", "Modification boite", "Création boite", "Boite ouverte non utilisée pour réappro"}
 
-//GetReasons return the possible reasons for a status report
-func (env *Env) GetReasons(c *gin.Context) {
-	c.JSON(200, reasons)
+//GetReasonsStatusReport return the possible reasons for a status report
+func (env *Env) GetReasonsStatusReport(c *gin.Context) {
+	c.JSON(200, reasonsStatusReport)
 }
 
 //GetStatusReports return all the status report
@@ -60,6 +60,8 @@ func (env *Env) CreateStatusReport(c *gin.Context) {
 		}
 	}
 }
+
+// curl -i -X POST -H "Content-Type: application/json" -d '{"boxid":1,"instrumentid":2,"specialty":"CEC","interlocutor":"Pauline","dategoing":145223364,"reason":"Rajout"}' http://localhost:5000/api/v1/statusreports
 
 func (env *Env) handleReason(boxID int64, instruID int64, reason string) bool {
 	if reason == "Rajout" {
