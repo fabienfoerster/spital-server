@@ -1,3 +1,1 @@
-FROM alpine:3.4
-ADD spital-server /
-CMD ["/spital-server"]
+FROM golang:1.6-onbuild
