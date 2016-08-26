@@ -69,6 +69,10 @@ func main() {
 	//BoxComposition API Endpoints
 	v1.GET("/boxes/:id/content", env.GetBoxComposition)
 	v1.POST("/boxes/:id/content", env.AddInstrumentToBox)
+	//StatusReport API Endpoints
+	v1.GET("/statusreports/reasons", env.GetReasons)
+	v1.GET("/statusreports", env.GetStatusReports)
+	v1.POST("/statusreports", env.CreateStatusReport)
 
 	// Run the router
 	r.Run(port)
@@ -81,7 +85,8 @@ func initDb() *gorp.DbMap {
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
 	dbmap.AddTableWithName(Box{}, "box").SetKeys(true, "ID")
 	dbmap.AddTableWithName(Instrument{}, "instrument").SetKeys(true, "ID")
-	dbmap.AddTableWithName(BoxComposition{}, "box_composition").SetUniqueTogether("BoxID", "InstrumentID")
+	dbmap.AddTableWithName(BoxComposition{}, "box_composition").SetKeys(true, "ID").SetUniqueTogether("BoxID", "InstrumentID")
+	dbmap.AddTableWithName(StatusReport{}, "status_report").SetKeys(true, "ID")
 	err = dbmap.CreateTablesIfNotExists()
 	checkErr(err, "Create table failed")
 	return dbmap

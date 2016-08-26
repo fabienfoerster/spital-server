@@ -23,6 +23,7 @@ func (env *Env) GetBoxes(c *gin.Context) {
 	var boxes Boxes
 	_, err := env.dbmap.Select(&boxes, "SELECT * FROM box")
 	if err != nil {
+		log.Println(err)
 		c.JSON(404, gin.H{"error": "no box(es) into the table"})
 	} else {
 		c.JSON(200, boxes)
