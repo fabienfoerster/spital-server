@@ -11,7 +11,7 @@ type Specialty struct {
 //GetSpecialties return all the specialties in the hospital
 func (env *Env) GetSpecialties(c *gin.Context) {
 	type Specialties []Specialty
-	var specialties = Specialties{Specialty{1, "CEC"}, Specialty{2, "COELIO"}, Specialty{3, "DIGESTIF"}, Specialty{4, "ESTHETIQUE"}, Specialty{5, "GYNECO"}, Specialty{6, "OPHTALMO"}, Specialty{7, "ORL"}, Specialty{8, "ORTHO"}, Specialty{9, "PEDIATRIE"}, Specialty{10, "THORACIQUE"}, Specialty{11, "UROLOGIE"}}
+	var specialties = Specialties{Specialty{1, "CEC"}, Specialty{2, "COELIO"}, Specialty{3, "DIGESTIF"}, Specialty{4, "ESTHETIQUE"}, Specialty{5, "GYNECO"}, Specialty{6, "OPHTALMO"}, Specialty{7, "ORL"}, Specialty{8, "ORTHO"}, Specialty{9, "PEDIATRIE"}, Specialty{10, "THORACIQUE"}, Specialty{11, "UROLOGIE"}, Specialty{12, "VASCULAIRE"}, Specialty{13, "DIVERS"}}
 
 	c.JSON(200, specialties)
 

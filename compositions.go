@@ -2,18 +2,17 @@ package main
 
 import (
 	"log"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
 
 // BoxComposition represent the composition of a chirurgical box
 type BoxComposition struct {
-	ID           int64 `db:"id" json:"id"`
-	BoxID        int64 `db:"boxid" json:"boxid"`
-	InstrumentID int64 `db:"instrumentid" json:"instrumentid"`
-	Quantity     int   `db:"quantity" json:"quantity"`
-	Missing      int   `db:"missing" json:"missing"`
+	ID           int64  `db:"id" json:"id"`
+	BoxID        string `db:"boxid" json:"boxid"`
+	InstrumentID string `db:"instrumentid" json:"instrumentid"`
+	Quantity     int    `db:"quantity" json:"quantity"`
+	Missing      int    `db:"missing" json:"missing"`
 }
 
 //BoxContent return the actual content of the box
@@ -28,7 +27,7 @@ func (env *Env) GetBoxComposition(c *gin.Context) {
 	id := c.Params.ByName("id")
 	type WholeContent []BoxContent
 	var wholeContent WholeContent
-	_, err := env.dbmap.Select(&wholeContent, "SELECT instrument.name, box_composition.quantity, box_composition.missing FROM box_composition  INNER JOIN instrument ON box_composition.instrumentid=instrument.id AND box_composition.boxid=?", id)
+	_, err := env.dbmap.Select(&wholeContent, "SELECT instrument.name, box_composition.quantity, box_composition.missing FROM box_composition  INNER JOIN instrument ON box_composition.instrumentid=instrument.ref AND box_composition.boxid=?", id)
 	if err != nil {
 		log.Println(err)
 		c.JSON(404, gin.H{"error": "no instrument(s) found for the box"})
@@ -42,11 +41,10 @@ func (env *Env) AddInstrumentToBox(c *gin.Context) {
 	id := c.Params.ByName("id")
 	var boxComposition BoxComposition
 	c.Bind(&boxComposition)
-	if boxComposition.InstrumentID == 0 || boxComposition.Quantity == 0 {
+	if boxComposition.InstrumentID == "" || boxComposition.Quantity == 0 {
 		c.JSON(422, gin.H{"error": "fields are empty"})
 	} else {
-		id64, _ := strconv.ParseInt(id, 10, 64)
-		boxComposition.BoxID = id64
+		boxComposition.BoxID = id
 		err := env.dbmap.Insert(&boxComposition)
 		if err != nil {
 			log.Println(err)

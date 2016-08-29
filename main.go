@@ -89,8 +89,8 @@ func initDb() *gorp.DbMap {
 	db, err := sql.Open("mysql", config.FormatDSN())
 	checkErr(err, "sql.Open failed")
 	dbmap := &gorp.DbMap{Db: db, Dialect: gorp.MySQLDialect{"InnoDB", "UTF8"}}
-	dbmap.AddTableWithName(Box{}, "box").SetKeys(true, "ID")
-	dbmap.AddTableWithName(Instrument{}, "instrument").SetKeys(true, "ID")
+	dbmap.AddTableWithName(Box{}, "box").SetKeys(false, "RegistrationNumber")
+	dbmap.AddTableWithName(Instrument{}, "instrument").SetKeys(false, "Ref")
 	dbmap.AddTableWithName(BoxComposition{}, "box_composition").SetKeys(true, "ID").SetUniqueTogether("BoxID", "InstrumentID")
 	dbmap.AddTableWithName(StatusReport{}, "status_report").SetKeys(true, "ID")
 	dbmap.AddTableWithName(IncidentReport{}, "incident_report").SetKeys(true, "ID")

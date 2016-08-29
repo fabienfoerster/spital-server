@@ -9,7 +9,6 @@ import (
 
 // Box represent a chirurgical box
 type Box struct {
-	ID                 int64  `db:"id" json:"id"`
 	RegistrationNumber string `db:"registration_number" json:"registration_number"`
 	Name               string `db:"name" json:"name"`
 	LastModified       int64  `db:"last_modified" json:"last_modified"`
