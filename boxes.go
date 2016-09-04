@@ -32,7 +32,7 @@ func (env *Env) GetBoxes(c *gin.Context) {
 //CreateBox add a box in the listing of boxes
 func (env *Env) CreateBox(c *gin.Context) {
 	var box Box
-	box.LastModified = time.Now().UnixNano()
+	box.LastModified = time.Now().Unix()
 	c.Bind(&box)
 	if box.Name == "" || box.Specialty == "" || box.RegistrationNumber == "" {
 		c.JSON(422, gin.H{"error": "fields are empty"})
