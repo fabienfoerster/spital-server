@@ -58,14 +58,14 @@ func (env *Env) AddInstrumentToBox(c *gin.Context) {
 
 // curl -i -X POST -H "Content-Type: application/json" -d '{"instrumentid":2,"quantity":5}' http://localhost:5000/api/v1/boxes/2/content
 
-func (env *Env) modifyInstrumentCount(boxID int64, instruID int64, quantity int) bool {
+func (env *Env) modifyInstrumentCount(boxID string, instruID string, quantity int) bool {
 	var boxComposition BoxComposition
 	err := env.dbmap.SelectOne(&boxComposition, "SELECT * FROM box_composition WHERE box_composition.boxid= :boxid AND box_composition.instrumentid= :instrumentid", map[string]interface{}{
 		"boxid":        boxID,
 		"instrumentid": instruID,
 	})
 	if err != nil {
-		log.Println(err)
+		log.Printf("Not found: %s\n", err)
 		return false
 	}
 
@@ -76,7 +76,7 @@ func (env *Env) modifyInstrumentCount(boxID int64, instruID int64, quantity int)
 	boxComposition.Missing = missing
 	_, err = env.dbmap.Update(&boxComposition)
 	if err != nil {
-		log.Println(err)
+		log.Printf("Update failed: %s", err)
 		return false
 	}
 	return true

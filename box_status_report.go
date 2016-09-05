@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -8,16 +9,18 @@ import (
 
 //StatusReport represent a status report
 type StatusReport struct {
-	ID            int64  `db:"id" json:"id"`
-	BoxID         int64  `db:"boxid" json:"boxid"`
-	InstrumentID  int64  `db:"instrumentid" json:"instrumentid"`
-	Specialty     string `db:"specialty" json:"specialty"`
-	Interlocutor  string `db:"interlocutor" json:"interlocutor"`
-	DateGoing     int64  `db:"dategoing" json:"dategoing"`
-	CommentGoing  string `db:"commentgoind" json:"commentgoing"`
-	DateComing    int64  `db:"datecoming" json:"datecoming"`
-	CommentComing string `db:"commentcoming" json:"commentcoming"`
-	Reason        string `db:"reason" json:"reason"`
+	ID             int64  `db:"id" json:"id"`
+	BoxID          string `db:"boxid" json:"boxid"`
+	BoxName        string `db:"boxname" json:"boxname"`
+	InstrumentID   string `db:"instrumentid" json:"instrumentid"`
+	InstrumentName string `db:"instrumentname" json:"instrumentname"`
+	Specialty      string `db:"specialty" json:"specialty"`
+	Interlocutor   string `db:"interlocutor" json:"interlocutor"`
+	DateGoing      string `db:"dategoing" json:"dategoing"`
+	CommentGoing   string `db:"commentgoind" json:"commentgoing"`
+	DateComing     string `db:"datecoming" json:"datecoming"`
+	CommentComing  string `db:"commentcoming" json:"commentcoming"`
+	Reason         string `db:"reason" json:"reason"`
 }
 
 var reasonsStatusReport = [...]string{"Instru manquant", "Rajout", "Réparation", "Instru en plus", "Prob stérilité/propreté", "Modification boite", "Création boite", "Boite ouverte non utilisée pour réappro"}
@@ -44,7 +47,8 @@ func (env *Env) GetStatusReports(c *gin.Context) {
 func (env *Env) CreateStatusReport(c *gin.Context) {
 	var statusReport StatusReport
 	c.Bind(&statusReport)
-	if statusReport.BoxID == 0 || statusReport.InstrumentID == 0 || statusReport.Specialty == "" || statusReport.Interlocutor == "" || statusReport.DateGoing == 0 || statusReport.Reason == "" {
+	fmt.Println(statusReport)
+	if statusReport.BoxID == "" || statusReport.InstrumentID == "" || statusReport.Specialty == "" || statusReport.Interlocutor == "" || statusReport.DateGoing == "" || statusReport.Reason == "" {
 		c.JSON(422, gin.H{"error": "fields are empty"})
 	} else {
 		err := env.dbmap.Insert(&statusReport)
@@ -74,7 +78,7 @@ func (env *Env) UpdateStatusReport(c *gin.Context) {
 	}
 	var json StatusReport
 	c.Bind(&json)
-	if json.BoxID == 0 || json.InstrumentID == 0 || json.Specialty == "" || json.Interlocutor == "" || json.DateGoing == 0 || json.Reason == "" {
+	if json.BoxID == "" || json.InstrumentID == "" || json.Specialty == "" || json.Interlocutor == "" || json.DateGoing == "" || json.Reason == "" {
 		c.JSON(422, gin.H{"error": "fields are empty"})
 	}
 	json.ID = statusReport.ID
@@ -86,7 +90,7 @@ func (env *Env) UpdateStatusReport(c *gin.Context) {
 	c.JSON(200, json)
 }
 
-func (env *Env) handleReason(boxID int64, instruID int64, reason string) bool {
+func (env *Env) handleReason(boxID string, instruID string, reason string) bool {
 	if reason == "Rajout" {
 		return env.modifyInstrumentCount(boxID, instruID, 1)
 	}
